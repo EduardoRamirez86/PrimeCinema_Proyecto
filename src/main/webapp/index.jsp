@@ -1,13 +1,23 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="model.Usuario" %>
+<%@ page session="true" %>
+<%
+    Usuario usuario = (Usuario) session.getAttribute("usuario");
+    if (usuario == null) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
+%>
+
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>JSP - Hello World</title>
+    <meta charset="UTF-8">
+    <title>Bienvenido</title>
 </head>
 <body>
-<h1><%= "Hello World!" %>
-</h1>
-<br/>
-<a href="hello-servlet">Hello Servlet</a>
+<h2>Bienvenido, <%= usuario.getNombreCompleto() %></h2>
+<p>ID de Usuario: <%= usuario.getId() %></p>
+<p>Correo Electrónico: <%= usuario.getCorreoElectronico() %></p>
+<p><a href="logout">Cerrar Sesión</a></p>
 </body>
 </html>

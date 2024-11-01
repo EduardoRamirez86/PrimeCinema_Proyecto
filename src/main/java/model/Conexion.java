@@ -4,10 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+
 public class Conexion {
 
-    private static final String USER = "root"; //
-    private static final String PASSWORD = "wandas86";
+    private static final String USER = "userjava"; //
+    private static final String PASSWORD = "12345";
 
     public static Connection ConectarBD(String bd) {
         Connection conexion = null;
@@ -45,7 +46,7 @@ public class Conexion {
     }
 
     public static void main(String[] args) {
-        Connection bd = ConectarBD("inventario");
+        Connection bd = ConectarBD("cinemaprime");
         Desconectar(bd);
     }
 }
