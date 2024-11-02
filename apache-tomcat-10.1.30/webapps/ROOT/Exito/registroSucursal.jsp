@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -68,7 +69,7 @@
 
 
     <div class="button-container">
-        <a class="ok-button" href="../MenuEmpleado.jsp">OK</a>
+        <a class="ok-button" href="../menuEmpleado.jsp">OK</a>
     </div>
 </div>
 </body>

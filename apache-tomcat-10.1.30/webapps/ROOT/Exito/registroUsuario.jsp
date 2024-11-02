@@ -67,7 +67,7 @@
     </c:if>
 
     <div class="button-container">
-        <a class="ok-button" href="../Login.jsp">OK</a>
+        <a class="ok-button" href="..//loginUsuario.jsp">OK</a>
     </div>
 </div>
 </body>
