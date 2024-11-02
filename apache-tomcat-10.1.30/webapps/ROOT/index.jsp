@@ -1,18 +1,53 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Página de Inicio</title>
+    <meta charset="UTF-8">
+    <title>Lista de Sucursales</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Si tienes un archivo CSS -->
 </head>
 <body>
-<h1>Bienvenido a Cinema Prime</h1>
-<h2>Selecciona una opción:</h2>
-<ul>
-    <li><a href="registroUsuario.jsp">Registro de Usuario</a></li>
-    <li><a href="loginUsuario.jsp">Iniciar Sesión de Usuario</a></li>
-    <li><a href="registroEmpleado.jsp">Registro de Empleado</a></li>
-    <li><a href="loginEmpleado.jsp">Iniciar Sesión de Empleado</a></li>
-    <li><a href="login.jsp">Login</a> </li>
-</ul>
+<h1>Lista de Sucursales</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre de Sucursal</th>
+        <th>Gerente</th>
+        <th>Dirección</th>
+        <th>Teléfono</th>
+    </tr>
+    </thead>
+    <tbody>
+    <c:forEach var="sucursal" items="${listaSucursales}">
+        <tr>
+            <td>${sucursal.id}</td>
+            <td>${sucursal.nombreSucursal}</td>
+            <td>${sucursal.gerente}</td>
+            <td>${sucursal.direccion}</td>
+            <td>${sucursal.telefono}</td>
+        </tr>
+    </c:forEach>
+    </tbody>
+</table>
+
+<h2>Agregar Nueva Sucursal</h2>
+<form action="sucursales" method="post">
+    <label for="nombreSucursal">Nombre de Sucursal:</label>
+    <input type="text" id="nombreSucursal" name="nombreSucursal" required>
+
+    <label for="gerente">Gerente:</label>
+    <input type="text" id="gerente" name="gerente" required>
+
+    <label for="direccion">Dirección:</label>
+    <input type="text" id="direccion" name="direccion" required>
+
+    <label for="telefono">Teléfono:</label>
+    <input type="text" id="telefono" name="telefono" required>
+
+    <input type="submit" value="Agregar Sucursal">
+</form>
 </body>
 </html>

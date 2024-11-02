@@ -5,7 +5,7 @@
   Time: 09:38
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="controller.ObtenerSucursalServlet" %>
+<%@ page import="controller.SucursalServlet" %>
 <%@ page import="java.util.List" %>
 <%@ page import="model.Sucursal" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
