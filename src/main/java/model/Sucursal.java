@@ -1,7 +1,7 @@
 package model;
 
 public class Sucursal {
-    private int id;
+    private int idSucursal;
     private String nombreSucursal;
     private String gerente;
     private String direccion;
@@ -13,13 +13,11 @@ public class Sucursal {
 
     // Getters y setters para todos los campos
 
-    public int getId() {
-        return id;
+    public int getIdSucursal() {
+        return idSucursal;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setIdSucursal(int idSucursal) { this.idSucursal = idSucursal; }
 
     public String getNombreSucursal() {
         return nombreSucursal;

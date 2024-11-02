@@ -1,3 +1,4 @@
+
 <%--
   Created by IntelliJ IDEA.
   User: eduardo
@@ -6,14 +7,14 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
-Cannot resolve taglib with uri http://jakarta.apache.org/taglibs/standard
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.sql.Connection, java.sql.PreparedStatement, java.sql.ResultSet, java.sql.SQLException" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.Pelicula" %>
 <%@ page import="java.util.List" %>
 <%@ page import="model.Sucursal" %>
 <%@ page import="model.Conexion" %>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -46,26 +47,26 @@ Cannot resolve taglib with uri http://jakarta.apache.org/taglibs/standard
         conn = Conexion.ConectarBD("cinemaprime");  // Asegúrate de usar el nombre correcto de la base de datos
 
         // Obtener la lista de películas
-        String consultaPeliculas = "SELECT id_pelicula, nombre FROM peliculas";
+        String consultaPeliculas = "SELECT idPelicula, nombre FROM peliculas";
         ps = conn.prepareStatement(consultaPeliculas);
         rs = ps.executeQuery();
 
         while (rs.next()) {
             Pelicula pelicula = new Pelicula();
-            pelicula.setIdPelicula(rs.getInt("id_pelicula"));
+            pelicula.setIdPelicula(rs.getInt("idPelicula"));
             pelicula.setNombre(rs.getString("nombre"));
             peliculas.add(pelicula);
         }
 
         // Obtener la lista de sucursales
-        String consultaSucursales = "SELECT id, nombre_sucursal FROM sucursales";
+        String consultaSucursales = "SELECT id, nombreSucursal FROM sucursales";
         ps = conn.prepareStatement(consultaSucursales);
         rs = ps.executeQuery();
 
         while (rs.next()) {
             Sucursal sucursal = new Sucursal();
-            sucursal.setId(rs.getInt("id"));
-            sucursal.setNombreSucursal(rs.getString("nombre_sucursal"));
+            sucursal.setIdSucursal(rs.getInt("idSucursal"));
+            sucursal.setNombreSucursal(rs.getString("nombreSucursal"));
             sucursales.add(sucursal);
         }
 
@@ -113,7 +114,7 @@ Cannot resolve taglib with uri http://jakarta.apache.org/taglibs/standard
         <label for="idSucursal">Sucursal:</label>
         <select id="idSucursal" name="idSucursal" required>
             <c:forEach items="${sucursales}" var="sucursal">
-                <option value="${sucursal.id}">${sucursal.nombreSucursal}</option>
+                <option value="${sucursal.idSucursal}">${sucursal.nombreSucursal}</option>
             </c:forEach>
         </select><br/>
 

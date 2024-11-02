@@ -31,7 +31,7 @@ public class SucursalDAO {
 
                 while (resultado.next()) {
                     Sucursal sucursal = new Sucursal();
-                    sucursal.setId(resultado.getInt("id"));
+                    sucursal.setIdSucursal(resultado.getInt("idSucursal"));
                     sucursal.setNombreSucursal(resultado.getString("nombreSucursal"));
                     sucursal.setGerente(resultado.getString("gerente"));
                     sucursal.setDireccion(resultado.getString("direccion"));

@@ -38,7 +38,7 @@ public class RegistroSalaServlet extends HttpServlet {
         try {
             // Obtener una conexión a la base de datos usando la clase Conexion
             conn = Conexion.ConectarBD("cinemaprime");  // Asegúrate de usar el nombre correcto de la base de datos
-            String consulta = "INSERT INTO salas (numero_sala, id_sucursal, id_pelicula, horario_proyeccion, fecha_proyeccion) VALUES (?, ?, ?, ?, ?)";
+            String consulta = "INSERT INTO salas (numeroSala, idSucursal, idPelicula, horarioProyeccion, fechaProyeccion) VALUES (?, ?, ?, ?, ?)";
             ps = conn.prepareStatement(consulta);
             ps.setString(1, numeroSala);
             ps.setInt(2, idSucursal);

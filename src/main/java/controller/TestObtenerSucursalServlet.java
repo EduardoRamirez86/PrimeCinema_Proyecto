@@ -20,7 +20,7 @@ public class TestObtenerSucursalServlet {
         } else {
             System.out.println("Lista de Sucursales:");
             for (Sucursal sucursal : sucursales) {
-                System.out.println("ID: " + sucursal.getId() +
+                System.out.println("IdSucursal: " + sucursal.getIdSucursal() +
                         ", Nombre: " + sucursal.getNombreSucursal() +
                         ", Gerente: " + sucursal.getGerente() +
                         ", Dirección: " + sucursal.getDireccion() +
@@ -43,7 +43,7 @@ public class TestObtenerSucursalServlet {
 
                 while (resultado.next()) {
                     Sucursal sucursal = new Sucursal();
-                    sucursal.setId(resultado.getInt("id"));
+                    sucursal.setIdSucursal(resultado.getInt("idSucursal"));
                     sucursal.setNombreSucursal(resultado.getString("nombreSucursal"));
                     sucursal.setGerente(resultado.getString("gerente"));
                     sucursal.setDireccion(resultado.getString("direccion"));

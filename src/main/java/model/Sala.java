@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.sql.Time;
 
 public class Sala {
-    private int id;
+    private int idSala;
     private int numeroSala;
     private int idSucursal;
     private int idPelicula;
@@ -27,12 +27,10 @@ public class Sala {
     // Getters y setters para todos los campos
 
     public int getId() {
-        return id;
+        return idSala;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setIdSala(int id) { this.idSala = id; }
 
     public int getNumeroSala() {
         return numeroSala;
