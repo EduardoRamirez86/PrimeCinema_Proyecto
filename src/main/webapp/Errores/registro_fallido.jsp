@@ -49,7 +49,7 @@
     <h1>Error</h1>
     <p> Se ha producido un error al procesar su solicitud, por favor revise los datos ingresados o verifique su registro en la plataforma.</p>
     <div class="button-container">
-        <a class="ok-button" href="../Login.jsp">OK</a>
+        <a class="ok-button" href="..//loginUsuario.jsp">OK</a>
     </div>
 
 

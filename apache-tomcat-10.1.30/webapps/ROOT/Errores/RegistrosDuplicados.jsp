@@ -50,7 +50,7 @@
     <h1>Error de Registro</h1>
     <p>El usuario o el DUI ya están duplicados. Por favor, intente de nuevo.</p>
     <div class="button-container">
-        <a class="ok-button" href="../Login.jsp">OK</a>
+        <a class="ok-button" href="../index.jsp">OK</a>
     </div>
 </div>
 </body>
