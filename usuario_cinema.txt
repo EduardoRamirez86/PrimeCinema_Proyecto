@@ -1,0 +1,5 @@
+create user 'userjava'@'localhost' IDENTIFIED BY '12345';
+
+GRANT ALL PRIVILEGES ON *.* TO 'userjava'@'localhost';
+
+select * from mysql.user;

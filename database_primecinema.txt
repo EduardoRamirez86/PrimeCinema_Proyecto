@@ -1,0 +1,150 @@
+-- Crear la base de datos si no existe
+CREATE DATABASE IF NOT EXISTS cinemaprime;
+USE cinemaprime;
+
+-- Tabla de Sucursales
+CREATE TABLE IF NOT EXISTS sucursales (
+    id INT NOT NULL AUTO_INCREMENT,
+    nombre_sucursal VARCHAR(255) NOT NULL,
+    gerente VARCHAR(255) NOT NULL,
+    direccion VARCHAR(255) NOT NULL,
+    telefono VARCHAR(15) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+-- Datos de Sucursales
+INSERT INTO sucursales (nombre_sucursal, gerente, direccion, telefono) VALUES
+('Cine Metro', 'Sofía García', 'Boulevard Los Próceres, San Salvador', '2222-3333'),
+('Cine Plaza Merliot', 'Carlos Reyes', 'Centro Comercial Merliot, Santa Tecla', '2222-4444'),
+('Cine Multiplaza', 'Ana Gutiérrez', 'Centro Comercial Multiplaza, Antiguo Cuscatlán', '2222-5555'),
+('Cine Santa Ana', 'Pedro Rivera', 'Centro Comercial Metrocentro, Santa Ana', '2222-6666'),
+('Cine San Miguel', 'Roberto Fuentes', 'Centro Comercial San Miguel, San Miguel', '2222-7777');
+
+-- Tabla de Películas
+CREATE TABLE IF NOT EXISTS peliculas (
+    id_pelicula INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(255) NOT NULL,
+    genero VARCHAR(255) NOT NULL,
+    clasificacion VARCHAR(255) NOT NULL,
+    formato ENUM('Tradicional','3D') NOT NULL,
+    valor_tercera_edad DECIMAL(5,2) NOT NULL,
+    valor_adulto DECIMAL(5,2) NOT NULL,
+    PRIMARY KEY (id_pelicula)
+);
+
+-- Datos de Películas
+INSERT INTO peliculas (nombre, genero, clasificacion, formato, valor_tercera_edad, valor_adulto) VALUES
+('Avatar 2', 'Ciencia Ficción', 'PG-13', '3D', 5.60, 6.55),
+('Spiderman: Sin Camino a Casa', 'Acción', 'PG-13', 'Tradicional', 3.90, 5.00),
+('La Bella y la Bestia', 'Fantasía', 'G', 'Tradicional', 3.90, 5.00),
+('El Rey León', 'Animación', 'G', '3D', 5.60, 6.55),
+('Los Vengadores: Endgame', 'Acción', 'PG-13', '3D', 5.60, 6.55);
+
+-- Tabla de Salas
+CREATE TABLE IF NOT EXISTS salas (
+    id_sala INT NOT NULL AUTO_INCREMENT,
+    numero_sala INT DEFAULT NULL,
+    id_sucursal INT DEFAULT NULL,
+    id_pelicula INT DEFAULT NULL,
+    horario_proyeccion TIME DEFAULT NULL,
+    fecha_proyeccion DATE DEFAULT NULL,
+    PRIMARY KEY (id_sala),
+    KEY id_sucursal (id_sucursal),
+    KEY id_pelicula (id_pelicula)
+);
+
+-- Datos de Salas
+INSERT INTO salas (numero_sala, id_sucursal, id_pelicula, horario_proyeccion, fecha_proyeccion) VALUES
+(1, 1, 1, '14:00:00', NULL),
+(2, 2, 2, '15:30:00', NULL),
+(12, 4, 3, '12:00:00', NULL);
+
+-- Tabla de Asientos
+CREATE TABLE IF NOT EXISTS asientos (
+    id_asiento INT NOT NULL AUTO_INCREMENT,
+    fila INT DEFAULT NULL,
+    columna INT DEFAULT NULL,
+    estado VARCHAR(20) DEFAULT 'disponible',
+    id_sala INT DEFAULT NULL,
+    PRIMARY KEY (id_asiento)
+);
+
+-- Tabla de Compras
+CREATE TABLE IF NOT EXISTS compras (
+    id_compra INT NOT NULL AUTO_INCREMENT,
+    id_usuario INT DEFAULT NULL,
+    id_pelicula INT DEFAULT NULL,
+    id_sala INT DEFAULT NULL,
+    fila INT DEFAULT NULL,
+    columna INT DEFAULT NULL,
+    fecha_compra TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    PRIMARY KEY (id_compra),
+    KEY id_usuario (id_usuario),
+    KEY id_sala (id_sala),
+    KEY id_pelicula (id_pelicula)
+);
+
+-- Datos de Compras
+INSERT INTO compras (id_usuario, id_pelicula, id_sala, fila, columna, fecha_compra) VALUES
+(1, 4, 5, 1, 1, '2023-11-16 04:42:18'),
+(1, 4, 5, 5, 3, '2023-11-16 04:53:20');
+
+-- Tabla de Empleados
+CREATE TABLE IF NOT EXISTS empleados (
+    id INT NOT NULL AUTO_INCREMENT,
+    login VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    dui VARCHAR(10) NOT NULL,
+    fecha_nacimiento DATE NOT NULL,
+    direccion VARCHAR(255) NOT NULL,
+    correo VARCHAR(100) NOT NULL,
+    telefono VARCHAR(15) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY usuario (usuario),
+    UNIQUE KEY dui (dui)
+);
+
+-- Datos de Empleados
+INSERT INTO empleados (login, password, nombre, apellido, dui, fecha_nacimiento, direccion, correo, telefono) VALUES
+('empleado1', 'contrasena1', 'Pedro', 'Gómez', '456789012-', '1990-05-15', 'Av. Principal, Ciudad', 'pedro@example.com', '555-123-4567'),
+('empleado2', 'contrasena2', 'Ana', 'Sánchez', '789012345-', '1985-11-20', 'Calle Secundaria, Pueblo', 'ana@example.com', '555-987-6543');
+
+-- Tabla de Usuarios
+CREATE TABLE IF NOT EXISTS usuarios (
+    id INT NOT NULL AUTO_INCREMENT,
+    login VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT null,
+    dui VARCHAR(10) NOT NULL,
+    direccion VARCHAR(255) NOT NULL,
+    correo_electronico VARCHAR(100) NOT NULL,
+    telefono VARCHAR(15) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY login (login),
+    UNIQUE KEY dui (dui)
+);
+
+-- Datos de Usuarios
+INSERT INTO usuarios (login, password, nombre, apellido, dui, direccion, correo_electronico, telefono) VALUES
+('usuario1', 'contrasena1', 'Juan ', 'Pérez','123456789-', 'Calle 123, Ciudad', 'juan@example.com', '123-456-7890'),
+('usuario2', 'contrasena2', 'María ', 'López','987654321-', 'Avenida XYZ, Pueblo', 'maria@example.com', '987-654-3210');
+
+-- Procedimiento Almacenado para Reiniciar Butacas
+DELIMITER //
+
+CREATE PROCEDURE ReiniciarButacas(IN id_sala_param INT)
+BEGIN
+    -- Actualizar el estado de todas las butacas de la sala a 'disponible'
+    UPDATE asientos
+    SET estado = 'disponible'
+    WHERE id_sala = id_sala_param;
+END //
+
+DELIMITER ;
+
+-- Asegúrate de que las claves foráneas se configuren después de insertar los datos relacionados, si es necesario.
+CALL ReiniciarButacas(1); -- Reemplaza 1 con el ID de la sala que deseas reiniciar
+-- Aquí puedes agregar las relaciones de clave foránea según las necesidades específicas de tu diseño.
