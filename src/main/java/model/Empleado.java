@@ -2,7 +2,7 @@ package model;
 
 public class Empleado {
     private String usuario;
-    private String contrasenia;
+    private String password;
     private String nombre;
     private String apellido;
     private String dui;
@@ -23,12 +23,12 @@ public class Empleado {
         this.usuario = usuario;
     }
 
-    public String getContrasenia() {
-        return contrasenia;
+    public String getPassword() {
+        return password;
     }
 
-    public void setContrasenia(String contrasenia) {
-        this.contrasenia = contrasenia;
+    public void setPassword(String contrasenia) {
+        this.password = contrasenia;
     }
 
     public String getNombre() {

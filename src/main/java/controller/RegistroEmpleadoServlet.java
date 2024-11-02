@@ -29,7 +29,7 @@ public class RegistroEmpleadoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Obtiene los parámetros del formulario
         String usuario = request.getParameter("usuario");
-        String contrasenia = request.getParameter("contrasenia");
+        String password = request.getParameter("password");
         String nombre = request.getParameter("nombre");
         String apellido = request.getParameter("apellido");
         String dui = request.getParameter("dui");
@@ -41,7 +41,7 @@ public class RegistroEmpleadoServlet extends HttpServlet {
         // Crea una nueva instancia de Empleado y establece sus propiedades
         Empleado empleado = new Empleado();
         empleado.setUsuario(usuario);
-        empleado.setContrasenia(contrasenia);
+        empleado.setPassword(password);
         empleado.setNombre(nombre);
         empleado.setApellido(apellido);
         empleado.setDui(dui);
@@ -55,7 +55,7 @@ public class RegistroEmpleadoServlet extends HttpServlet {
             String sql = "INSERT INTO empleados (usuario, contrasenia, nombre, apellido, dui, fecha_nacimiento, direccion, correo, telefono) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, empleado.getUsuario());
-            statement.setString(2, empleado.getContrasenia());
+            statement.setString(2, empleado.getPassword());
             statement.setString(3, empleado.getNombre());
             statement.setString(4, empleado.getApellido());
             statement.setString(5, empleado.getDui());

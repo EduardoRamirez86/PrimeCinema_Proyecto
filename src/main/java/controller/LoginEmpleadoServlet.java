@@ -27,26 +27,24 @@ public class LoginEmpleadoServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String usuario = request.getParameter("usuario");
+        String login = request.getParameter("usuario");
         String password = request.getParameter("password");
 
         try {
-            String sql = "SELECT * FROM empleados WHERE usuario = ? AND password = ?";
+            String sql = "SELECT * FROM empleados WHERE login = ? AND password = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, usuario);
+            statement.setString(1, login);
             statement.setString(2, password);
-
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                // Login exitoso
-                response.sendRedirect("paginaInicio.jsp"); // Redirigir a la página de inicio
+                response.getWriter().write("Inicio de sesión exitoso como empleado");
+                // Redirigir a otra página o realizar alguna acción
             } else {
-                // Login fallido
-                response.sendRedirect("loginEmpleado.jsp");
+                response.getWriter().write("Usuario o contraseña incorrectos");
             }
         } catch (SQLException e) {
-            response.getWriter().write("Error en el login: " + e.getMessage());
+            response.getWriter().write("Error en el inicio de sesión: " + e.getMessage());
         }
     }
 
@@ -55,4 +53,3 @@ public class LoginEmpleadoServlet extends HttpServlet {
         Conexion.Desconectar(connection);
     }
 }
-

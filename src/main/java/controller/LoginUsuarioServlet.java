@@ -35,18 +35,16 @@ public class LoginUsuarioServlet extends HttpServlet {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, login);
             statement.setString(2, password);
-
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                // Login exitoso
-                response.sendRedirect("paginaInicio.jsp"); // Redirigir a la página de inicio
+                response.getWriter().write("Inicio de sesión exitoso como usuario");
+                // Redirigir a otra página o realizar alguna acción
             } else {
-                // Login fallido
-                response.sendRedirect("loginUsuario.jsp");
+                response.getWriter().write("Usuario o contraseña incorrectos");
             }
         } catch (SQLException e) {
-            response.getWriter().write("Error en el login: " + e.getMessage());
+            response.getWriter().write("Error en el inicio de sesión: " + e.getMessage());
         }
     }
 
