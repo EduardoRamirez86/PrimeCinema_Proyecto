@@ -12,6 +12,7 @@
     <li><a href="loginUsuario.jsp">Iniciar Sesión de Usuario</a></li>
     <li><a href="registroEmpleado.jsp">Registro de Empleado</a></li>
     <li><a href="loginEmpleado.jsp">Iniciar Sesión de Empleado</a></li>
+    <li><a href="login">Login</a> </li>
 </ul>
 </body>
 </html>

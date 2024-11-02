@@ -1,0 +1,116 @@
+/* Estilo para el fondo de la página */
+body {
+    background-image: url(../img/Cine1.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif; /* Añadido para que coincida con el estilo del menú */
+}
+
+.centered-title {
+    text-align: center;
+    margin-top: 20px;
+    background-color: rgba(255, 0, 0, 0.9); /* Rojo con un 50% de opacidad */
+    border: 2px solid #ff0000; /* Borde rojo sólido de 2 píxeles */
+    border-radius: 5px; /* Borde redondeado */
+    padding: 10px; /* Espacio interno alrededor del título */
+}
+
+.menu {
+    background-color: #1A202C;
+    color: #fff;
+    padding-top: 10px;
+    height: 70px;
+    z-index: 2;
+}
+
+.menu__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    max-width: 1200px;
+    height: 100%;
+    margin: 0 auto;
+}
+
+.menu__links {
+    height: 100%;
+    transition: transform .5s;
+    display: flex; /* Cambia a 'flex' para disposición horizontal */
+}
+
+.menu__item {
+    list-style: none;
+    position: relative;
+    height: 100%;
+    --clip: polygon(0 0, 100% 0, 100% 0, 0 0);
+    --transform: none;
+    display: block; /* Cambia a 'block' para disposición horizontal */
+    margin-right: 20px; /* Agrega margen entre los elementos */
+}
+
+.menu__item:hover {
+    --clip: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+    --transform: none;
+}
+
+.menu__link {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+}
+
+.menu__link:hover {
+    background-color: #3f4a63; /* Cambia el color al pasar el ratón */
+}
+
+.menu__hamburguer {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    cursor: pointer;
+    display: none;
+}
+
+/* Estilo para el fondo de la página */
+body {
+    background-image: url(../img/Cinepolis.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif; /* Añadido para que coincida con el estilo del menú */
+}
+
+/* Estilo para el contenedor de la lista de sucursales */
+.sucursales-container {
+    background-color: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente */
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+/* Estilo para cada elemento de la lista de sucursales */
+.sucursal-item {
+    list-style: none;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo semi-transparente */
+    border-radius: 5px;
+    color: #fff;
+}
+
+.sucursal-item strong {
+    font-weight: bold;
+}
+
+/* Estilo para el texto "No hay sucursales disponibles" */
+.no-sucursales {
+    color: #fff;
+}

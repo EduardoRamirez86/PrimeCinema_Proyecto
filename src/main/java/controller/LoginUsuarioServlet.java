@@ -8,6 +8,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -38,8 +39,12 @@ public class LoginUsuarioServlet extends HttpServlet {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                response.getWriter().write("Inicio de sesión exitoso como usuario");
-                // Redirigir a otra página o realizar alguna acción
+                // Guardar el nombre de usuario en la sesión
+                HttpSession session = request.getSession();
+                session.setAttribute("usuario", login);
+
+                // Redirigir al JSP de menú
+                response.sendRedirect("menuUsuario.jsp");
             } else {
                 response.getWriter().write("Usuario o contraseña incorrectos");
             }
@@ -53,5 +58,6 @@ public class LoginUsuarioServlet extends HttpServlet {
         Conexion.Desconectar(connection);
     }
 }
+
 
 
