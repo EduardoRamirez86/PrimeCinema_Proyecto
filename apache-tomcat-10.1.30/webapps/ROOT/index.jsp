@@ -1,23 +1,17 @@
-<%@ page import="model.Usuario" %>
-<%@ page session="true" %>
-<%
-    Usuario usuario = (Usuario) session.getAttribute("usuario");
-    if (usuario == null) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
-%>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Bienvenido</title>
+    <title>Página de Inicio</title>
 </head>
 <body>
-<h2>Bienvenido, <%= usuario.getNombreCompleto() %></h2>
-<p>ID de Usuario: <%= usuario.getId() %></p>
-<p>Correo Electrónico: <%= usuario.getCorreoElectronico() %></p>
-<p><a href="logout">Cerrar Sesión</a></p>
+<h1>Bienvenido a Cinema Prime</h1>
+<h2>Selecciona una opción:</h2>
+<ul>
+    <li><a href="registroUsuario.jsp">Registro de Usuario</a></li>
+    <li><a href="loginUsuario.jsp">Iniciar Sesión de Usuario</a></li>
+    <li><a href="registroEmpleado.jsp">Registro de Empleado</a></li>
+    <li><a href="loginEmpleado.jsp">Iniciar Sesión de Empleado</a></li>
+</ul>
 </body>
 </html>

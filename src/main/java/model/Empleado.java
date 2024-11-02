@@ -1,33 +1,34 @@
 package model;
 
-public class Usuario {
-    private String login;
-    private String password;
+public class Empleado {
+    private String usuario;
+    private String contrasenia;
     private String nombre;
     private String apellido;
     private String dui;
+    private String fechaNacimiento;
     private String direccion;
-    private String correoElectronico;
+    private String correo;
     private String telefono;
 
     // Constructor vacío
-    public Usuario() {}
+    public Empleado() {}
 
     // Getters y Setters
-    public String getLogin() {
-        return login;
+    public String getUsuario() {
+        return usuario;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
-    public String getPassword() {
-        return password;
+    public String getContrasenia() {
+        return contrasenia;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
     }
 
     public String getNombre() {
@@ -54,6 +55,14 @@ public class Usuario {
         this.dui = dui;
     }
 
+    public String getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(String fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
     public String getDireccion() {
         return direccion;
     }
@@ -62,12 +71,12 @@ public class Usuario {
         this.direccion = direccion;
     }
 
-    public String getCorreoElectronico() {
-        return correoElectronico;
+    public String getCorreo() {
+        return correo;
     }
 
-    public void setCorreoElectronico(String correoElectronico) {
-        this.correoElectronico = correoElectronico;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public String getTelefono() {
@@ -78,6 +87,4 @@ public class Usuario {
         this.telefono = telefono;
     }
 }
-
-
 
