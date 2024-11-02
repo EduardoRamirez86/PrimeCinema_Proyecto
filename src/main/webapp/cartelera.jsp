@@ -59,7 +59,7 @@
       Class.forName("com.mysql.cj.jdbc.Driver");
       String url = "jdbc:mysql://localhost/cinemaprime";
       String usuario = "root";
-      String contraseña = "";
+      String contraseña = "wandas86";
       Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
 
       String consulta = "SELECT nombre FROM peliculas";

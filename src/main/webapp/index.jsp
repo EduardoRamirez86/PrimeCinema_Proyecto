@@ -1,53 +1,43 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
-<!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Lista de Sucursales</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Si tienes un archivo CSS -->
+    <title>Inicio - Cinemaprime</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        nav {
+            margin: 20px 0;
+        }
+        nav a {
+            padding: 10px 15px;
+            margin: 5px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        nav a:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-<h1>Lista de Sucursales</h1>
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Nombre de Sucursal</th>
-        <th>Gerente</th>
-        <th>Dirección</th>
-        <th>Teléfono</th>
-    </tr>
-    </thead>
-    <tbody>
-    <c:forEach var="sucursal" items="${listaSucursales}">
-        <tr>
-            <td>${sucursal.id}</td>
-            <td>${sucursal.nombreSucursal}</td>
-            <td>${sucursal.gerente}</td>
-            <td>${sucursal.direccion}</td>
-            <td>${sucursal.telefono}</td>
-        </tr>
-    </c:forEach>
-    </tbody>
-</table>
-
-<h2>Agregar Nueva Sucursal</h2>
-<form action="sucursales" method="post">
-    <label for="nombreSucursal">Nombre de Sucursal:</label>
-    <input type="text" id="nombreSucursal" name="nombreSucursal" required>
-
-    <label for="gerente">Gerente:</label>
-    <input type="text" id="gerente" name="gerente" required>
-
-    <label for="direccion">Dirección:</label>
-    <input type="text" id="direccion" name="direccion" required>
-
-    <label for="telefono">Teléfono:</label>
-    <input type="text" id="telefono" name="telefono" required>
-
-    <input type="submit" value="Agregar Sucursal">
-</form>
+<h1>Bienvenido a Cinemaprime</h1>
+<nav>
+    <a href="loginUsuario.jsp">login usuario</a>
+    <a href="registroUsuario.jsp">Registrar Usuario</a>
+    <a href="registroEmpleado.jsp">registrar empleado</a>
+    <a href="loginEmpleado.jsp">login empleado</a>
+</nav>
+<footer>
+    <p>&copy; 2024 Cinemaprime. Todos los derechos reservados.</p>
+</footer>
 </body>
 </html>
