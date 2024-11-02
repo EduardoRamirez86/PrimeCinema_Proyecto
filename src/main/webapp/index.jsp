@@ -1,67 +1,38 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List" %>
 <%@ page import="model.Sucursal" %>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Lista de Sucursales</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        h1 {
-            color: #333;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .error {
-            color: red;
-        }
-    </style>
 </head>
 <body>
 <h1>Lista de Sucursales</h1>
-
-<%
-    List<Sucursal> sucursales = (List<Sucursal>) request.getAttribute("sucursales");
-    String mensaje = (String) request.getAttribute("mensaje");
-
-    // Si hay un mensaje de error, mostrarlo
-    if (mensaje != null) {
-%>
-<p class="error"><strong><%= mensaje %></strong></p>
-<%
-} else if (sucursales != null && !sucursales.isEmpty()) {
-%>
-<ul>
-    <% for (Sucursal sucursal : sucursales) { %>
-    <li>
-        <strong>Nombre:</strong> <%= sucursal.getNombreSucursal() %> <br>
-        <strong>Gerente:</strong> <%= sucursal.getGerente() %> <br>
-        <strong>Dirección:</strong> <%= sucursal.getDireccion() %> <br>
-        <strong>Teléfono:</strong> <%= sucursal.getTelefono() %>
-    </li>
-    <% } %>
-</ul>
-<%
-} else {
-%>
-<p>No se encontraron sucursales en la base de datos.</p>
-<%
-    }
-%>
+<c:if test="${not empty mensaje}">
+    <p>${mensaje}</p>
+</c:if>
+<c:if test="${not empty sucursales}">
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Nombre Sucursal</th>
+            <th>Gerente</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+        </tr>
+        <c:forEach var="sucursal" items="${sucursales}">
+            <tr>
+                <td>${sucursal.id}</td>
+                <td>${sucursal.nombreSucursal}</td>
+                <td>${sucursal.gerente}</td>
+                <td>${sucursal.direccion}</td>
+                <td>${sucursal.telefono}</td>
+            </tr>
+        </c:forEach>
+    </table>
+</c:if>
 </body>
 </html>
-
-
 
 
 

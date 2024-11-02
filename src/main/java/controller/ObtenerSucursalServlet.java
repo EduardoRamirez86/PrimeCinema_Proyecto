@@ -3,6 +3,13 @@ package controller;
 import model.Conexion;
 import model.Sucursal;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,19 +18,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 @WebServlet("/ObtenerSucursalServlet")
 public class ObtenerSucursalServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Sucursal> listaSucursales = new ArrayList<>();
 
-        // Conexión a la base de datos
         try (Connection conexion = Conexion.ConectarBD("cinemaprime")) {
             if (conexion == null) {
                 System.out.println("No se pudo establecer la conexión con la base de datos.");
@@ -33,12 +32,10 @@ public class ObtenerSucursalServlet extends HttpServlet {
                 return;
             }
 
-            // Consulta SQL para obtener todas las sucursales
             String consulta = "SELECT * FROM sucursales";
             try (PreparedStatement statement = conexion.prepareStatement(consulta);
                  ResultSet resultado = statement.executeQuery()) {
 
-                // Si hay resultados, crea los objetos Sucursal y los añade a la lista
                 while (resultado.next()) {
                     Sucursal sucursal = new Sucursal();
                     sucursal.setId(resultado.getInt("id"));
@@ -57,18 +54,17 @@ public class ObtenerSucursalServlet extends HttpServlet {
             return;
         }
 
-        // Configura la lista de Sucursales como un atributo de solicitud
         if (listaSucursales.isEmpty()) {
             request.setAttribute("mensaje", "No se encontraron sucursales en la base de datos.");
         } else {
             request.setAttribute("sucursales", listaSucursales);
         }
 
-        // Redirige a la página JSP "listaSucursales"
         RequestDispatcher dispatcher = request.getRequestDispatcher("listaSucursales.jsp");
         dispatcher.forward(request, response);
     }
 }
+
 
 
 
