@@ -1,5 +1,6 @@
 package controller;
 
+import jakarta.servlet.http.HttpSession;
 import model.Empleado;
 import model.Conexion;
 
@@ -38,8 +39,12 @@ public class LoginEmpleadoServlet extends HttpServlet {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                response.getWriter().write("Inicio de sesión exitoso como empleado");
-                // Redirigir a otra página o realizar alguna acción
+                // Guardar el nombre de usuario en la sesión
+                HttpSession session = request.getSession();
+                session.setAttribute("empleados", login);
+
+                // Redirigir al JSP de menú
+                response.sendRedirect("menuEmpleado.jsp");
             } else {
                 response.getWriter().write("Usuario o contraseña incorrectos");
             }
