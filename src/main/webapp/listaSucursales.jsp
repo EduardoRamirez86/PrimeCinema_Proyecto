@@ -5,7 +5,7 @@
   Time: 09:38
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="controller.ObtenerSucursalServlet" %>
+<%@ page import="controller.SucursalServlet" %>
 <%@ page import="java.util.List" %>
 <%@ page import="model.Sucursal" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
@@ -35,7 +35,7 @@
         <a href="estrenos.jsp" class="menu__link menu__link--inside">Estrenos</a>
       </li>
       <li class="menu__item menu__item--show">
-        <a href="ObtenerSucursalServlet" class="menu__link menu__link--inside">Sucursales</a>
+        <a href="listaSucursales.jsp" class="menu__link menu__link--inside">Sucursales</a>
       </li>
       <li class="menu__item menu__item--show">
         <a href="quienesSomos.jsp" class="menu__link menu__link--inside">Quienes Somos</a>

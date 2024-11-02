@@ -7,8 +7,8 @@ import java.sql.SQLException;
 
 public class Conexion {
 
-    private static final String USER = "userjava"; //
-    private static final String PASSWORD = "12345";
+    private static final String USER = "root"; //
+    private static final String PASSWORD = "wandas86";
 
     public static Connection ConectarBD(String bd) {
         Connection conexion = null;

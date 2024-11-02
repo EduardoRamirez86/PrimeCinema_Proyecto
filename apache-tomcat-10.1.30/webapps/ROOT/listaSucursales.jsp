@@ -35,7 +35,7 @@
         <a href="estrenos.jsp" class="menu__link menu__link--inside">Estrenos</a>
       </li>
       <li class="menu__item menu__item--show">
-        <a href="ObtenerSucursalServlet" class="menu__link menu__link--inside">Sucursales</a>
+        <a href="listaSucursales.jsp" class="menu__link menu__link--inside">Sucursales</a>
       </li>
       <li class="menu__item menu__item--show">
         <a href="quienesSomos.jsp" class="menu__link menu__link--inside">Quienes Somos</a>
