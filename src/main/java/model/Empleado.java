@@ -1,7 +1,8 @@
 package model;
 
 public class Empleado {
-    private String usuario;
+    private int idEmpleado;
+    private String login;
     private String password;
     private String nombre;
     private String apellido;
@@ -15,9 +16,13 @@ public class Empleado {
     public Empleado() {}
 
     // Getters y Setters
-    public String getUsuario() { return usuario; }
+    public int getIdEmpleado() { return idEmpleado; }
 
-    public void setUsuario(String usuario) { this.usuario = usuario; }
+    public void setIdEmpleado(int idEmpleado) { this.idEmpleado = idEmpleado; }
+
+    public String getLogin() { return login; }
+
+    public void setLogin(String login) { this.login = login; }
 
     public String getPassword() {return password; }
 

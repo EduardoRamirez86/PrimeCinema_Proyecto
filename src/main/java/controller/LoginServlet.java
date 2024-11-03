@@ -19,10 +19,10 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         String usuario = request.getParameter("usuario");
-        String contrasenia = request.getParameter("password");
+        String password = request.getParameter("password");
 
         if (esEmpleado(usuario)) {
-            if (autenticarEmpleado(usuario, contrasenia)) {
+            if (autenticarEmpleado(usuario, password)) {
                 String nombreEmpleado = obtenerNombreEmpleado(usuario);
                 request.setAttribute("nombreEmpleado", nombreEmpleado);
                 response.sendRedirect("menuEmpleado.jsp");
@@ -35,7 +35,7 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("idUsuario", idUsuario);
 
-            if (autenticarUsuario(usuario, contrasenia)) {
+            if (autenticarUsuario(usuario, password)) {
                 response.sendRedirect("menuUsuario.jsp");
             } else {
                 response.sendRedirect("Errores/registro_fallido.jsp");
@@ -72,7 +72,7 @@ public class LoginServlet extends HttpServlet {
 
         try {
             conn = Conexion.ConectarBD("cinemaprime"); // Conexión a la base de datos
-            String consulta = "SELECT * FROM empleados WHERE usuario = ? AND password = ?";
+            String consulta = "SELECT * FROM empleados WHERE login = ? AND password = ?";
             ps = conn.prepareStatement(consulta);
             ps.setString(1, usuario);
             ps.setString(2, password);
@@ -119,7 +119,7 @@ public class LoginServlet extends HttpServlet {
 
         try {
             conn = Conexion.ConectarBD("cinemaprime"); // Conexión a la base de datos
-            String consulta = "SELECT nombre FROM empleados WHERE usuario = ?";
+            String consulta = "SELECT nombre FROM empleados WHERE login = ?";
             ps = conn.prepareStatement(consulta);
             ps.setString(1, usuario);
             rs = ps.executeQuery();

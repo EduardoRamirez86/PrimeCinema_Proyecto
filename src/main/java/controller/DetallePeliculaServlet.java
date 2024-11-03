@@ -1,6 +1,15 @@
 package controller;
 
 import model.Conexion;
+import model.Pelicula;
+import model.Sala;
+import model.Sucursal;
+import model.Usuario;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,87 +18,79 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-@WebServlet("/detallePelicula")
+@WebServlet("/DetallePeliculaServlet")
 public class DetallePeliculaServlet extends HttpServlet {
-
     private Connection connection;
 
     @Override
-    public void init() {
-        this.connection = Conexion.ConectarBD("cinemaprime");
+    public void init() throws ServletException {
+        super.init();
+        connection = Conexion.ConectarBD("cinemaprime");
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        int idUsuario = (int) session.getAttribute("idUsuario");
+
+        // Verifica que el idUsuario no sea null
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+        if (idUsuario == null) {
+            response.sendRedirect("errorPage.jsp");
+            return;
+        }
 
         String nombrePelicula = request.getParameter("pelicula");
 
-        String nombre = null;
-        String genero = null;
-        String clasificacion = null;
-        String formato = null;
-        double valorTerceraEdad = 0.0;
-        double valorAdulto = 0.0;
+        Pelicula pelicula = null;
+        Sala sala = null;
+        Sucursal sucursal = null;
 
         try {
-            String consultaPelicula = "SELECT id_pelicula, nombre, genero, clasificacion, formato, valor_tercera_edad, valor_adulto FROM peliculas WHERE nombre = ?";
-            PreparedStatement statementPelicula = connection.prepareStatement(consultaPelicula);
-            statementPelicula.setString(1, nombrePelicula);
+            String consulta = "SELECT p.idPelicula, p.nombre, p.genero, p.clasificacion, p.formato, p.valorTerceraEdad, p.valorAdulto, " +
+                    "s.nombreSucursal AS sucursal, sa.numeroSala, sa.horarioProyeccion " +
+                    "FROM peliculas p " +
+                    "JOIN salas sa ON p.idPelicula = sa.idPelicula " +
+                    "JOIN sucursales s ON sa.idSucursal = s.idSucursal " +
+                    "WHERE p.nombre = ?";
+            PreparedStatement statement = connection.prepareStatement(consulta);
+            statement.setString(1, nombrePelicula);
 
-            ResultSet resultadoPelicula = statementPelicula.executeQuery();
+            try (ResultSet resultado = statement.executeQuery()) {
+                if (resultado.next()) {
+                    pelicula = new Pelicula();
+                    pelicula.setIdPelicula(resultado.getInt("idPelicula"));
+                    pelicula.setNombre(resultado.getString("nombre"));
+                    pelicula.setGenero(resultado.getString("genero"));
+                    pelicula.setClasificacion(resultado.getString("clasificacion"));
+                    pelicula.setFormato(resultado.getString("formato"));
+                    pelicula.setValorTerceraEdad(resultado.getDouble("valorTerceraEdad"));
+                    pelicula.setValorAdulto(resultado.getDouble("valorAdulto"));
 
-            if (resultadoPelicula.next()) {
-                int idPelicula = resultadoPelicula.getInt("id_pelicula");
-                nombre = resultadoPelicula.getString("nombre");
-                genero = resultadoPelicula.getString("genero");
-                clasificacion = resultadoPelicula.getString("clasificacion");
-                formato = resultadoPelicula.getString("formato");
-                valorTerceraEdad = resultadoPelicula.getDouble("valor_tercera_edad");
-                valorAdulto = resultadoPelicula.getDouble("valor_adulto");
+                    sala = new Sala();
+                    sala.setNumeroSala(resultado.getInt("numeroSala"));
+                    sala.setHorarioProyeccion(resultado.getTime("horarioProyeccion"));
 
-                request.setAttribute("idPelicula", idPelicula);
+                    sucursal = new Sucursal();
+                    sucursal.setNombreSucursal(resultado.getString("sucursal"));
 
-                String consultaSala = "SELECT id_sala, numero_sala, id_sucursal, horario_proyeccion, fecha_proyeccion FROM salas WHERE id_pelicula = ?";
-                PreparedStatement statementSala = connection.prepareStatement(consultaSala);
-                statementSala.setInt(1, idPelicula);
-
-                ResultSet resultadoSala = statementSala.executeQuery();
-
-                if (resultadoSala.next()) {
-                    request.setAttribute("idSala", resultadoSala.getInt("id_sala"));
-                    request.setAttribute("numeroSala", resultadoSala.getInt("numero_sala"));
-                    request.setAttribute("idSucursal", resultadoSala.getInt("id_sucursal"));
-                    request.setAttribute("horarioProyeccion", resultadoSala.getString("horario_proyeccion"));
-                    request.setAttribute("fechaProyeccion", resultadoSala.getString("fecha_proyeccion"));
+                    // Guarda los atributos en la sesión
+                    session.setAttribute("idPelicula", pelicula.getIdPelicula());
+                    session.setAttribute("idSala", sala.getNumeroSala());
                 }
-
-                statementSala.close();
             }
-
-            statementPelicula.close();
-
         } catch (SQLException e) {
-            response.getWriter().write("Error al obtener detalles de la película: " + e.getMessage());
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "Error al acceder a la base de datos.");
         }
 
-        request.setAttribute("nombre", nombre);
-        request.setAttribute("genero", genero);
-        request.setAttribute("clasificacion", clasificacion);
-        request.setAttribute("formato", formato);
-        request.setAttribute("valorTerceraEdad", valorTerceraEdad);
-        request.setAttribute("valorAdulto", valorAdulto);
-
+        // Asegúrate de que los objetos no sean nulos antes de establecerlos en la solicitud
+        request.setAttribute("pelicula", pelicula);
+        request.setAttribute("sala", sala);
+        request.setAttribute("sucursal", sucursal);
         request.setAttribute("idUsuario", idUsuario);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("usuario/detallePelicula.jsp");
+        // Redirigir al JSP de detalles de la película
+        RequestDispatcher dispatcher = request.getRequestDispatcher("detallePelicula.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -98,4 +99,7 @@ public class DetallePeliculaServlet extends HttpServlet {
         Conexion.Desconectar(connection);
     }
 }
+
+
+
 

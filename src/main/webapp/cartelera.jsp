@@ -35,7 +35,7 @@
         <a href="estrenos.jsp" class="menu__link menu__link--inside">Estrenos</a>
       </li>
       <li class="menu__item menu__item--show">
-        <a href="ObtenerSucursalesServlet" class="menu__link menu__link--inside">Sucursales</a>
+        <a href="sucursal" class="menu__link menu__link--inside">Sucursales</a>
       </li>
       <li class="menu__item menu__item--show">
         <a href="quienesSomos.jsp" class="menu__link menu__link--inside">Quienes Somos</a>
@@ -71,7 +71,7 @@
   <tr>
     <td><%= resultado.getString("nombre") %></td>
     <td>
-      <form action="detallePelicula" method="post">
+      <form action="DetallePeliculaServlet" method="post">
         <input type="hidden" name="pelicula" value="<%= resultado.getString("nombre") %>">
 
         <input type="submit" value="Comprar">
