@@ -1,5 +1,6 @@
 package controller;
 
+import model.Cliente;
 import model.Conexion;
 import model.Usuario;
 import model.Empleado;
@@ -22,9 +23,10 @@ public class LoginServlet extends HttpServlet {
         String usuario = request.getParameter("usuario");
         String contrasenia = request.getParameter("password");
 
-        System.out.println("Autenticando usuario: " + usuario); // Agregar aquí
+        System.out.println("Autenticando usuario: " + usuario); // Mensaje de depuración
 
         if (esEmpleado(usuario)) {
+            // Autenticación como empleado
             Empleado empleado = autenticarEmpleado(usuario, contrasenia);
             if (empleado != null) {
                 HttpSession session = request.getSession();
@@ -33,14 +35,25 @@ public class LoginServlet extends HttpServlet {
             } else {
                 response.sendRedirect("Errores/registro_fallido.jsp");
             }
+        } else if (esCliente(usuario)) {
+            // Autenticación como cliente
+            Cliente cliente = autenticarCliente(usuario, contrasenia);
+            if (cliente != null) {
+                HttpSession session = request.getSession();
+                session.setAttribute("cliente", cliente); // Guardar cliente en la sesión
+                response.sendRedirect("MenuEmpleado.jsp"); // Redirigir a MenuEmpleado para clientes autenticados
+            } else {
+                response.sendRedirect("Errores/registro_fallido.jsp");
+            }
         } else {
+            // Autenticación como usuario regular
             Usuario usuarioObj = autenticarUsuario(usuario, contrasenia);
             if (usuarioObj != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("idUsuario", usuarioObj.getIdUsuario()); // Guardar idUsuario en la sesión
                 session.setAttribute("usuario", usuarioObj); // Guardar el objeto Usuario en la sesión
 
-                // Agregar aquí para verificar que el idUsuario se está almacenando correctamente
+                // Mensajes de depuración para verificar almacenamiento en sesión
                 System.out.println("Usuario autenticado: " + usuarioObj.getNombre());
                 System.out.println("idUsuario almacenado en sesión: " + usuarioObj.getIdUsuario());
 
@@ -50,6 +63,7 @@ public class LoginServlet extends HttpServlet {
             }
         }
     }
+
 
 
     private boolean esEmpleado(String usuario) {
@@ -144,6 +158,53 @@ public class LoginServlet extends HttpServlet {
 
         return usuarioObj; // Devuelve el objeto Usuario o null si no se encuentra
     }
+
+    private boolean esCliente(String usuario) {
+        // Lógica para verificar si el usuario existe en la tabla Cliente
+        // Podrías hacer una consulta para verificar si existe en la tabla de clientes
+        try (Connection conn = Conexion.ConectarBD("cinemaprime");
+             PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM Cliente WHERE usuario = ?")) {
+            stmt.setString(1, usuario);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private Cliente autenticarCliente(String usuario, String contrasenia) {
+        // Autenticación del cliente mediante consulta SQL
+        Cliente cliente = null;
+        try (Connection conn = Conexion.ConectarBD("cinemaprime");
+             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Cliente WHERE usuario = ? AND contra = ?")) {
+            stmt.setString(1, usuario);
+            stmt.setString(2, contrasenia);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                cliente = new Cliente(
+                        rs.getInt("ID_Cliente"),
+                        rs.getString("primer_nombre"),
+                        rs.getString("segundo_nombre"),
+                        rs.getString("primer_apellido"),
+                        rs.getString("segundo_apellido"),
+                        rs.getString("DUI"),
+                        rs.getString("direccion"),
+                        rs.getString("telefono"),
+                        rs.getString("correo"),
+                        rs.getString("fecha_nacimiento"),
+                        usuario,
+                        contrasenia
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return cliente;
+    }
+
 }
 
 

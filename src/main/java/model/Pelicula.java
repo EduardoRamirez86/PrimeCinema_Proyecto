@@ -79,4 +79,6 @@ public class Pelicula {
     public void setValorAdulto(double valorAdulto) {
         this.valorAdulto = valorAdulto;
     }
+
+
 }

@@ -114,7 +114,7 @@ public class PeliculaDAO {
         }
     }
 
-    public List<Pelicula> listarPeliculas() {
+    public static  List<Pelicula> listarPeliculas() {
         List<Pelicula> peliculas = new ArrayList<>();
         String sql = "SELECT * FROM peliculas";
         try (Connection conn = Conexion.ConectarBD("cinemaprime");
