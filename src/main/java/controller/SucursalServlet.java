@@ -10,37 +10,59 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet("/sucursales")
+@WebServlet("/sucursal")
 public class SucursalServlet extends HttpServlet {
-    private final SucursalDAO sucursalDAO = new SucursalDAO();
+
+    private SucursalDAO sucursalDAO;
+
+    @Override
+    public void init() throws ServletException {
+        // Inicializa el DAO
+        sucursalDAO = new SucursalDAO();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Sucursal> listaSucursales = sucursalDAO.obtenerTodas();
-        request.setAttribute("listaSucursales", listaSucursales);
-        request.getRequestDispatcher("listaSucursales.jsp").forward(request, response);
+        mostrarSucursales(request, response);
+    }
+
+    private void mostrarSucursales(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            // Recupera la lista de sucursales desde el DAO
+            List<Sucursal> sucursales = sucursalDAO.listarSucursales();
+            // Establece la lista como atributo en la solicitud
+            request.setAttribute("sucursales", sucursales);
+            // Redirige a la página JSP para mostrar las sucursales
+            request.getRequestDispatcher("/sucursal.jsp").forward(request, response);
+        } catch (SQLException e) {
+            e.printStackTrace(); // Registra el error en la consola
+            throw new ServletException("Error al mostrar las sucursales", e);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
 
-        String nombreSucursal = request.getParameter("nombreSucursal");
-        String gerente = request.getParameter("gerente");
-        String direccion = request.getParameter("direccion");
-        String telefono = request.getParameter("telefono");
+        if ("add".equals(action)) {
+            // Aquí puedes agregar la lógica para agregar una nueva sucursal
+            String nombreSucursal = request.getParameter("nombreSucursal");
+            String gerente = request.getParameter("gerente");
+            String direccion = request.getParameter("direccion");
+            String telefono = request.getParameter("telefono");
 
-
-        Sucursal sucursal = new Sucursal();
-        sucursal.setNombreSucursal(nombreSucursal);
-        sucursal.setGerente(gerente);
-        sucursal.setDireccion(direccion);
-        sucursal.setTelefono(telefono);
-        sucursalDAO.agregarSucursal(sucursal);
-
-        // Redirigir a la lista de sucursales
-        response.sendRedirect("sucursales");
+            Sucursal nuevaSucursal = new Sucursal(0, nombreSucursal, gerente, direccion, telefono);
+            try {
+                sucursalDAO.agregarSucursal(nuevaSucursal);
+                response.sendRedirect("sucursal"); // Redirecciona a la lista después de agregar
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new ServletException("Error al agregar la sucursal", e);
+            }
+        }
     }
 }
 

@@ -8,22 +8,32 @@ public class Sucursal {
     private String telefono;
 
     public Sucursal() {
-        // Constructor vacío
+
+    }
+    public Sucursal(int idSucursal, String nombreSucursal, String gerente, String direccion, String telefono) {
+        this.idSucursal = idSucursal;
+        this.nombreSucursal = nombreSucursal;
+        this.gerente = gerente;
+        this.direccion = direccion;
+        this.telefono = telefono;
     }
 
-    // Getters y setters para todos los campos
 
     public int getIdSucursal() {
         return idSucursal;
     }
 
-    public void setIdSucursal(int idSucursal) { this.idSucursal = idSucursal; }
+    public void setIdSucursal(int id) {
+        this.idSucursal = id;
+    }
 
     public String getNombreSucursal() {
         return nombreSucursal;
     }
 
-    public void setNombreSucursal(String nombreSucursal) { this.nombreSucursal = nombreSucursal; }
+    public void setNombreSucursal(String nombreSucursal) {
+        this.nombreSucursal = nombreSucursal;
+    }
 
     public String getGerente() {
         return gerente;

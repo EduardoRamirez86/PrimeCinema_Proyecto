@@ -35,7 +35,7 @@
         <a href="estrenos.jsp" class="menu__link menu__link--inside">Estrenos</a>
       </li>
       <li class="menu__item menu__item--show">
-        <a href="listaSucursales.jsp" class="menu__link menu__link--inside">Sucursales</a>
+        <a href="sucursal" class="menu__link menu__link--inside">Sucursales</a>
       </li>
       <li class="menu__item menu__item--show">
         <a href="quienesSomos.jsp" class="menu__link menu__link--inside">Quienes Somos</a>
@@ -51,24 +51,28 @@
 <div class="sucursales-container">
   <ul>
     <%
-      // Obtén la lista de sucursales del atributo de solicitud
       List<Sucursal> sucursales = (List<Sucursal>) request.getAttribute("sucursales");
-
-      // Verifica si la lista de sucursales no está vacía
       if (sucursales != null && !sucursales.isEmpty()) {
         for (Sucursal sucursal : sucursales) {
     %>
-    <li class="sucursal-item">
-      <strong>Nombre de Sucursal:</strong> <%= sucursal.getNombreSucursal() %><br>
-      <strong>Gerente:</strong> <%= sucursal.getGerente() %><br>
-      <strong>Dirección:</strong> <%= sucursal.getDireccion() %><br>
-      <strong>Teléfono:</strong> <%= sucursal.getTelefono() %><br>
-    </li>
+    <tr>
+      <td><%= sucursal.getIdSucursal() %></td>
+      <td><%= sucursal.getNombreSucursal() %></td>
+      <td><%= sucursal.getGerente() %></td>
+      <td><%= sucursal.getDireccion() %></td>
+      <td><%= sucursal.getTelefono() %></td>
+      <td>
+        <a href="SucursalServlet?action=edit&id=<%= sucursal.getIdSucursal() %>" class="button">Editar</a>
+        <a href="SucursalServlet?action=delete&id=<%= sucursal.getIdSucursal() %>" class="button button-danger" onclick="return confirm('¿Estás seguro de eliminar esta sucursal?');">Eliminar</a>
+      </td>
+    </tr>
     <%
       }
     } else {
     %>
-    <li>No hay sucursales disponibles.</li>
+    <tr>
+      <td colspan="6">No hay sucursales registradas.</td>
+    </tr>
     <%
       }
     %>

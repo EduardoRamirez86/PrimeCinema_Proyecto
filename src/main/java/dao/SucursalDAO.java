@@ -11,61 +11,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SucursalDAO {
-    private final String DB_NAME = "cinemaprime";
 
-    // Método para obtener todas las sucursales
-    public List<Sucursal> obtenerTodas() {
-        List<Sucursal> listaSucursales = new ArrayList<>();
-        Connection conexion = null;
+    public void agregarSucursal(Sucursal sucursal) throws SQLException {
+        String sql = "INSERT INTO sucursales (nombreSucursal, gerente, direccion, telefono) VALUES (?, ?, ?, ?)";
+        try (Connection conn = Conexion.ConectarBD("cinemaprime");
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-        try {
-            conexion = Conexion.ConectarBD(DB_NAME);
-            if (conexion == null) {
-                System.out.println("No se pudo establecer la conexión con la base de datos.");
-                return listaSucursales;
-            }
-
-            String consulta = "SELECT * FROM sucursales";
-            try (PreparedStatement statement = conexion.prepareStatement(consulta);
-                 ResultSet resultado = statement.executeQuery()) {
-
-                while (resultado.next()) {
-                    Sucursal sucursal = new Sucursal();
-                    sucursal.setIdSucursal(resultado.getInt("idSucursal"));
-                    sucursal.setNombreSucursal(resultado.getString("nombreSucursal"));
-                    sucursal.setGerente(resultado.getString("gerente"));
-                    sucursal.setDireccion(resultado.getString("direccion"));
-                    sucursal.setTelefono(resultado.getString("telefono"));
-                    listaSucursales.add(sucursal);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Conexion.Desconectar(conexion);
+            pstmt.setString(1, sucursal.getNombreSucursal());
+            pstmt.setString(2, sucursal.getGerente());
+            pstmt.setString(3, sucursal.getDireccion());
+            pstmt.setString(4, sucursal.getTelefono());
+            pstmt.executeUpdate();
         }
-        return listaSucursales;
     }
 
-    // Método para agregar una nueva sucursal
-    public void agregarSucursal(Sucursal sucursal) {
-        Connection conexion = null;
+    public List<Sucursal> listarSucursales() throws SQLException {
+        List<Sucursal> sucursales = new ArrayList<>();
+        String sql = "SELECT * FROM sucursales";
+        try (Connection conn = Conexion.ConectarBD("cinemaprime");
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
 
-        try {
-            conexion = Conexion.ConectarBD(DB_NAME);
-            String consulta = "INSERT INTO sucursales (nombreSucursal, gerente, direccion, telefono) VALUES (?, ?, ?, ?)";
-            try (PreparedStatement statement = conexion.prepareStatement(consulta)) {
-                statement.setString(1, sucursal.getNombreSucursal());
-                statement.setString(2, sucursal.getGerente());
-                statement.setString(3, sucursal.getDireccion());
-                statement.setString(4, sucursal.getTelefono());
-                statement.executeUpdate();
+            while (rs.next()) {
+                Sucursal sucursal = new Sucursal(
+                        rs.getInt("idSucursal"),
+                        rs.getString("nombreSucursal"),
+                        rs.getString("gerente"),
+                        rs.getString("direccion"),
+                        rs.getString("telefono")
+                );
+                sucursales.add(sucursal);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Conexion.Desconectar(conexion);
         }
+        return sucursales;
     }
 }
 

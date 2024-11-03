@@ -35,6 +35,7 @@
     <a href="registroUsuario.jsp">Registrar Usuario</a>
     <a href="registroEmpleado.jsp">registrar empleado</a>
     <a href="loginEmpleado.jsp">login empleado</a>
+    <a href="sucursal">prueba sucursal</a>
 </nav>
 <footer>
     <p>&copy; 2024 Cinemaprime. Todos los derechos reservados.</p>

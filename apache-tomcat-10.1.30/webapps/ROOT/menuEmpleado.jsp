@@ -36,7 +36,7 @@
             <a href="registro_pelicula.jsp" class="menu__link menu__link--inside">Registro Pelicula</a>
           </li>
           <li class="menu__inside">
-            <a href="venta_entradas.jsp" class="menu__link menu__link--inside">Registro Butaca</a>
+            <a href="sucursal" class="menu__link menu__link--inside">Registro Butaca</a>
           </li>
         </ul>
       </li>
