@@ -36,7 +36,7 @@ public class SucursalServlet extends HttpServlet {
             // Establece la lista como atributo en la solicitud
             request.setAttribute("sucursales", sucursales);
             // Redirige a la página JSP para mostrar las sucursales
-            request.getRequestDispatcher("/sucursal.jsp").forward(request, response);
+            request.getRequestDispatcher("/mostrarSucursales.jsp").forward(request, response);
         } catch (SQLException e) {
             e.printStackTrace(); // Registra el error en la consola
             throw new ServletException("Error al mostrar las sucursales", e);

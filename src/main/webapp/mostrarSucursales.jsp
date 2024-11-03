@@ -51,28 +51,24 @@
 <div class="sucursales-container">
   <ul>
     <%
+      // Obtén la lista de sucursales del atributo de solicitud
       List<Sucursal> sucursales = (List<Sucursal>) request.getAttribute("sucursales");
+
+      // Verifica si la lista de sucursales no está vacía
       if (sucursales != null && !sucursales.isEmpty()) {
         for (Sucursal sucursal : sucursales) {
     %>
-    <tr>
-      <td><%= sucursal.getIdSucursal() %></td>
-      <td><%= sucursal.getNombreSucursal() %></td>
-      <td><%= sucursal.getGerente() %></td>
-      <td><%= sucursal.getDireccion() %></td>
-      <td><%= sucursal.getTelefono() %></td>
-      <td>
-        <a href="SucursalServlet?action=edit&id=<%= sucursal.getIdSucursal() %>" class="button">Editar</a>
-        <a href="SucursalServlet?action=delete&id=<%= sucursal.getIdSucursal() %>" class="button button-danger" onclick="return confirm('¿Estás seguro de eliminar esta sucursal?');">Eliminar</a>
-      </td>
-    </tr>
+    <li class="sucursal-item">
+      <strong>Nombre de Sucursal:</strong> <%= sucursal.getNombreSucursal() %><br>
+      <strong>Gerente:</strong> <%= sucursal.getGerente() %><br>
+      <strong>Dirección:</strong> <%= sucursal.getDireccion() %><br>
+      <strong>Teléfono:</strong> <%= sucursal.getTelefono() %><br>
+    </li>
     <%
       }
     } else {
     %>
-    <tr>
-      <td colspan="6">No hay sucursales registradas.</td>
-    </tr>
+    <li>No hay sucursales disponibles.</li>
     <%
       }
     %>
