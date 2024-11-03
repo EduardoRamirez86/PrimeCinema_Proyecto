@@ -87,16 +87,13 @@ public class DetallePeliculaServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Obtener el ID de la película desde los parámetros de la solicitud
         String idPeliculaParam = request.getParameter("idPelicula");
         Integer idPelicula = null;
 
-        // Verificamos si el parámetro no es nulo y lo convertimos a Integer
         if (idPeliculaParam != null) {
             try {
                 idPelicula = Integer.parseInt(idPeliculaParam);
             } catch (NumberFormatException e) {
-                // Manejo de error si el parámetro no es un número válido
                 request.setAttribute("error", "ID de película inválido.");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
                 dispatcher.forward(request, response);
@@ -107,11 +104,13 @@ public class DetallePeliculaServlet extends HttpServlet {
         // Lógica para obtener datos de la película
         if (idPelicula != null) {
             Pelicula pelicula = peliculaDAO.obtenerPeliculaPorId(idPelicula);
-            Sala sala = peliculaDAO.obtenerSalaPorPelicula(idPelicula);
-            Sucursal sucursal = peliculaDAO.obtenerSucursalPorPelicula(idPelicula);
 
-            // Comprobar si se encontró la película
+            // Debugging: imprimir el resultado
+            System.out.println("ID de película: " + idPelicula);
+            System.out.println("Película encontrada: " + (pelicula != null ? pelicula.getNombre() : "No encontrada"));
+
             if (pelicula != null) {
+                // Establecer todos los atributos necesarios
                 request.setAttribute("nombre", pelicula.getNombre());
                 request.setAttribute("genero", pelicula.getGenero());
                 request.setAttribute("clasificacion", pelicula.getClasificacion());
@@ -119,20 +118,14 @@ public class DetallePeliculaServlet extends HttpServlet {
                 request.setAttribute("valorTerceraEdad", pelicula.getValorTerceraEdad());
                 request.setAttribute("valorAdulto", pelicula.getValorAdulto());
 
-                // Asignar datos de la sala y sucursal
-                if (sala != null) {
-                    request.setAttribute("numeroSala", sala.getNumeroSala());
-                } else {
-                    request.setAttribute("numeroSala", null);
-                }
+                Sala sala = peliculaDAO.obtenerSalaPorPelicula(idPelicula);
+                Sucursal sucursal = peliculaDAO.obtenerSucursalPorPelicula(idPelicula);
 
-                if (sucursal != null) {
-                    request.setAttribute("nombreSucursal", sucursal.getNombreSucursal());
-                } else {
-                    request.setAttribute("nombreSucursal", null);
-                }
+                request.setAttribute("nombreSucursal", sucursal != null ? sucursal.getNombreSucursal() : null);
+                request.setAttribute("numeroSala", sala != null ? sala.getNumeroSala() : null);
+                request.setAttribute("horario", sala != null ? sala.getHorarioProyeccion() : null);
 
-                // Redirigir a la JSP para mostrar los detalles de la película
+                // Redirigir a la JSP
                 RequestDispatcher dispatcher = request.getRequestDispatcher("detallesPelicula.jsp");
                 dispatcher.forward(request, response);
             } else {

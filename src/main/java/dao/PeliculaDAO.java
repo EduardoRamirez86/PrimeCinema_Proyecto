@@ -36,17 +36,12 @@ public class PeliculaDAO {
 
     public Pelicula obtenerPeliculaPorId(int idPelicula) {
         Pelicula pelicula = null;
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+        String sql = "SELECT * FROM peliculas WHERE idPelicula = ?"; // Asegúrate de que el nombre de la columna sea correcto
 
-        try {
-            // Conectar a la base de datos
-            conn = DriverManager.getConnection("jdbc:tu_url_de_bd", "usuario", "contraseña");
-            String sql = "SELECT * FROM peliculas WHERE id = ?";
-            stmt = conn.prepareStatement(sql);
+        try (Connection conn = Conexion.ConectarBD("cinemaprime");
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, idPelicula);
-            rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
                 // Crear un objeto Pelicula con los datos recuperados
@@ -60,16 +55,7 @@ public class PeliculaDAO {
                 pelicula.setValorAdulto(rs.getDouble("valor_adulto"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            // Cerrar recursos
-            try {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            e.printStackTrace(); // Considera registrar el error en un log
         }
         return pelicula;
     }
@@ -93,7 +79,6 @@ public class PeliculaDAO {
         return sala;
     }
 
-
     public Sucursal obtenerSucursalPorPelicula(int idPelicula) {
         Sucursal sucursal = null;
         String sql = "SELECT s.* FROM sucursales s INNER JOIN salas sa ON s.idSucursal = sa.idSucursal WHERE sa.idPelicula = ?";
@@ -112,8 +97,6 @@ public class PeliculaDAO {
         }
         return sucursal;
     }
-
-
 
     public void agregarPelicula(Pelicula pelicula) {
         String sql = "INSERT INTO peliculas (nombre, genero, clasificacion, formato, valorTerceraEdad, valorAdulto) VALUES (?, ?, ?, ?, ?, ?)";
