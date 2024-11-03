@@ -40,7 +40,7 @@ public class RegistroEmpleadoServlet extends HttpServlet {
 
         // Crea una nueva instancia de Empleado y establece sus propiedades
         Empleado empleado = new Empleado();
-        empleado.setUsuario(usuario);
+        empleado.setLogin(usuario);
         empleado.setPassword(password);
         empleado.setNombre(nombre);
         empleado.setApellido(apellido);
@@ -52,9 +52,9 @@ public class RegistroEmpleadoServlet extends HttpServlet {
 
         try {
             // Prepara la consulta SQL para insertar un nuevo empleado
-            String sql = "INSERT INTO empleados (usuario, contrasenia, nombre, apellido, dui, fecha_nacimiento, direccion, correo, telefono) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO empleados (usuario, password, nombre, apellido, dui, fecha_nacimiento, direccion, correo, telefono) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, empleado.getUsuario());
+            statement.setString(1, empleado.getLogin());
             statement.setString(2, empleado.getPassword());
             statement.setString(3, empleado.getNombre());
             statement.setString(4, empleado.getApellido());

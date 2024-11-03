@@ -35,7 +35,7 @@
     <a href="registroUsuario.jsp">Registrar Usuario</a>
     <a href="registroEmpleado.jsp">registrar empleado</a>
     <a href="loginEmpleado.jsp">login empleado</a>
-    <a href="login.jsp">login empleado</a>
+    <a href="login.jsp">login en general para los 2</a>
 
     <a href="detallePelicula.jsp">prueba sucursal</a>
 </nav>

@@ -1,6 +1,8 @@
 package controller;
 
 import model.Conexion;
+import model.Usuario;
+import model.Empleado;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,26 +18,32 @@ import java.sql.SQLException;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String usuario = request.getParameter("usuario");
-        String password = request.getParameter("password");
+        String contrasenia = request.getParameter("password");
+
+        System.out.println("Autenticando usuario: " + usuario); // Agregar aquí
 
         if (esEmpleado(usuario)) {
-            if (autenticarEmpleado(usuario, password)) {
-                String nombreEmpleado = obtenerNombreEmpleado(usuario);
-                request.setAttribute("nombreEmpleado", nombreEmpleado);
+            Empleado empleado = autenticarEmpleado(usuario, contrasenia);
+            if (empleado != null) {
+                HttpSession session = request.getSession();
+                session.setAttribute("empleado", empleado); // Guardar empleado en la sesión
                 response.sendRedirect("menuEmpleado.jsp");
             } else {
                 response.sendRedirect("Errores/registro_fallido.jsp");
             }
         } else {
-            int idUsuario = obtenerIdUsuario(usuario);
-            // Almacena el ID del usuario en la sesión
-            HttpSession session = request.getSession();
-            session.setAttribute("idUsuario", idUsuario);
+            Usuario usuarioObj = autenticarUsuario(usuario, contrasenia);
+            if (usuarioObj != null) {
+                HttpSession session = request.getSession();
+                session.setAttribute("idUsuario", usuarioObj.getIdUsuario()); // Guardar idUsuario en la sesión
+                session.setAttribute("usuario", usuarioObj); // Guardar el objeto Usuario en la sesión
 
-            if (autenticarUsuario(usuario, password)) {
+                // Agregar aquí para verificar que el idUsuario se está almacenando correctamente
+                System.out.println("Usuario autenticado: " + usuarioObj.getNombre());
+                System.out.println("idUsuario almacenado en sesión: " + usuarioObj.getIdUsuario());
+
                 response.sendRedirect("menuUsuario.jsp");
             } else {
                 response.sendRedirect("Errores/registro_fallido.jsp");
@@ -43,121 +51,99 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
+
     private boolean esEmpleado(String usuario) {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
 
         try {
-            conn = Conexion.ConectarBD("cinemaprime"); // Conexión a la base de datos
-            String consulta = "SELECT * FROM empleados WHERE usuario = ?";
+            conn = Conexion.ConectarBD("cinemaprime");
+            String consulta = "SELECT * FROM empleados WHERE login = ?";
             ps = conn.prepareStatement(consulta);
             ps.setString(1, usuario);
             rs = ps.executeQuery();
 
-            return rs.next(); // Retorna true si existe en la tabla de empleados
+            return rs.next();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Conexion.Desconectar(conn); // Cierra la conexión
+            Conexion.Desconectar(conn);
         }
 
-        return false; // Si no existe en la tabla de empleados, considerarlo como usuario
+        return false;
     }
 
-    private boolean autenticarEmpleado(String usuario, String password) {
+    private Empleado autenticarEmpleado(String usuario, String password) {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
+        Empleado empleado = null;
 
         try {
-            conn = Conexion.ConectarBD("cinemaprime"); // Conexión a la base de datos
+            conn = Conexion.ConectarBD("cinemaprime");
             String consulta = "SELECT * FROM empleados WHERE login = ? AND password = ?";
             ps = conn.prepareStatement(consulta);
             ps.setString(1, usuario);
             ps.setString(2, password);
             rs = ps.executeQuery();
 
-            return rs.next(); // Autenticación exitosa para empleado
+            if (rs.next()) {
+                empleado = new Empleado();
+                empleado.setIdEmpleado(rs.getInt("idEmpleado"));
+                empleado.setLogin(rs.getString("login"));
+                empleado.setPassword(rs.getString("password"));
+                empleado.setNombre(rs.getString("nombre"));
+                empleado.setApellido(rs.getString("apellido"));
+                empleado.setDui(rs.getString("dui"));
+                empleado.setFechaNacimiento(rs.getString("fechaNacimiento"));
+                empleado.setDireccion(rs.getString("direccion"));
+                empleado.setCorreo(rs.getString("correo"));
+                empleado.setTelefono(rs.getString("telefono"));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Conexion.Desconectar(conn); // Cierra la conexión
+            Conexion.Desconectar(conn);
         }
 
-        return false; // Autenticación fallida para empleado
+        return empleado; // Devuelve el objeto Empleado o null si no se encuentra
     }
 
-    private boolean autenticarUsuario(String usuario, String contrasenia) {
+    private Usuario autenticarUsuario(String usuario, String contrasenia) {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
+        Usuario usuarioObj = null;
 
         try {
-            conn = Conexion.ConectarBD("cinemaprime"); // Conexión a la base de datos
+            conn = Conexion.ConectarBD("cinemaprime");
             String consulta = "SELECT * FROM usuarios WHERE login = ? AND password = ?";
             ps = conn.prepareStatement(consulta);
             ps.setString(1, usuario);
             ps.setString(2, contrasenia);
             rs = ps.executeQuery();
 
-            return rs.next(); // Autenticación exitosa para usuario
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Conexion.Desconectar(conn); // Cierra la conexión
-        }
-
-        return false; // Autenticación fallida para usuario
-    }
-
-    private String obtenerNombreEmpleado(String usuario) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        String nombreEmpleado = null;
-
-        try {
-            conn = Conexion.ConectarBD("cinemaprime"); // Conexión a la base de datos
-            String consulta = "SELECT nombre FROM empleados WHERE login = ?";
-            ps = conn.prepareStatement(consulta);
-            ps.setString(1, usuario);
-            rs = ps.executeQuery();
-
             if (rs.next()) {
-                nombreEmpleado = rs.getString("nombre");
+                usuarioObj = new Usuario();
+                usuarioObj.setIdUsuario(rs.getInt("idUsuario"));
+                usuarioObj.setLogin(rs.getString("login"));
+                usuarioObj.setPassword(rs.getString("password"));
+                usuarioObj.setNombre(rs.getString("nombre"));
+                usuarioObj.setApellido(rs.getString("apellido"));
+                usuarioObj.setDui(rs.getString("dui"));
+                usuarioObj.setDireccion(rs.getString("direccion"));
+                usuarioObj.setCorreoElectronico(rs.getString("correoElectronico"));
+                usuarioObj.setTelefono(rs.getString("telefono"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Conexion.Desconectar(conn); // Cierra la conexión
+            Conexion.Desconectar(conn);
         }
 
-        return nombreEmpleado; // Retorna el nombre del empleado o null si no se encontró
-    }
-
-    private int obtenerIdUsuario(String usuario) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        try {
-            conn = Conexion.ConectarBD("cinemaprime"); // Conexión a la base de datos
-            String consulta = "SELECT id FROM usuarios WHERE login = ?";
-            ps = conn.prepareStatement(consulta);
-            ps.setString(1, usuario);
-            rs = ps.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt("id"); // Devuelve el ID del usuario
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Conexion.Desconectar(conn); // Cierra la conexión
-        }
-
-        return 0; // Retorna 0 si no se encuentra el ID del usuario
+        return usuarioObj; // Devuelve el objeto Usuario o null si no se encuentra
     }
 }
+
 

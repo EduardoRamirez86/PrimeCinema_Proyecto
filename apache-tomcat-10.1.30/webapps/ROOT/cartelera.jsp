@@ -5,10 +5,9 @@
   Time: 08:52
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.DriverManager" %>
-<%@ page import="java.sql.Statement" %>
-<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.*" %>
+<%@ page import="model.Conexion" %>
+<%@ page import="java.net.URLEncoder" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -54,17 +53,13 @@
     <th>Acción</th>
   </tr>
   <%
+    Connection conexion = null;
+    PreparedStatement statement = null;
     try {
-      // Importa las clases necesarias para la conexión a la base de datos
-      Class.forName("com.mysql.cj.jdbc.Driver");
-      String url = "jdbc:mysql://localhost/cinemaprime";
-      String usuario = "root";
-      String contraseña = "wandas86";
-      Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
-
-      String consulta = "SELECT nombre FROM peliculas";
-      Statement statement = conexion.createStatement();
-      ResultSet resultado = statement.executeQuery(consulta);
+      conexion = Conexion.ConectarBD("cinemaprime");
+      String consulta = "SELECT nombre FROM peliculas"; // Ajusta según tu consulta
+      statement = conexion.prepareStatement(consulta);
+      ResultSet resultado = statement.executeQuery();
 
       while (resultado.next()) {
   %>
@@ -72,8 +67,7 @@
     <td><%= resultado.getString("nombre") %></td>
     <td>
       <form action="DetallePeliculaServlet" method="post">
-        <input type="hidden" name="pelicula" value="<%= resultado.getString("nombre") %>">
-
+        <input type="hidden" name="pelicula" value="<%= URLEncoder.encode(resultado.getString("nombre"), "UTF-8") %>">
         <input type="submit" value="Comprar">
       </form>
     </td>
@@ -82,10 +76,14 @@
       }
       statement.close();
       conexion.close();
-    } catch (Exception e) {
+    } catch (SQLException e) {
       e.printStackTrace();
+      request.setAttribute("errorMessage", "Error al acceder a la base de datos.");
+      // Redirigir o mostrar el mensaje de error en el JSP
     }
   %>
+</table>
+
 </table>
 </body>
 </html>
